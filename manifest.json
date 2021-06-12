@@ -2,15 +2,18 @@
   "manifest_version": 2,
 
   "name": "Reverso Extractor",
-  "description": "This extension will facilitate the isolation of reverso examples",
-  "version": "1.0",
+  "description": "This extension will facilitate the isolation of reverso examples for the purposes of creating flashcards to be uploaded to Anki or Quizlet",
+  "version": "0.0.1",
   "browser_action": {
    "default_popup": "popup.html"
  },
   "content_scripts": [{
     "js": ["jquery-3.6.0.min.js", "content.js"],
-    "matches": [ "http://*/*", "https://*/*"]
+    "matches": [ "https://context.reverso.net/*"]
   }],
+  "icons": {"16": "ReversoExtractIcon16.png",
+            "48": "ReversoExtractIcon48.png",
+            "129": "ReversoExtractIcon128.png"},
 
- "permissions": ["activeTab"]
+ "permissions": ["activeTab", "storage"]
 }

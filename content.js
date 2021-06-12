@@ -1,12 +1,48 @@
 // listener for when button in popup is pressed
+
 chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
   if (response.greeting === "hello") {
     runExtension()
   };
+  if (response.greeting === "clear") {
+    var c = confirm('Are you sure you want to clear the examples?')
+    if (c == true){
+      chrome.storage.local.remove(["examples"]),function(){
+        console.log("clearing storage")
+      }
+    };
+  };
+  /*because retrieving examples from chrome storage is asynchronous,
+  we need to use a Promise object to wait for the results. Otherwise
+  the browser will try to write to the new window before the stored
+  examples have been retrieved, and it will think there is nothing
+  to write.*/
+  if (response.greeting === "show") {
+    selectedArray = []
+    let p = new Promise((resolve, reject) =>{
+      chrome.storage.local.get(['examples'], function(result){
+        console.log(result.examples)
+        if (result.examples === undefined){
+          reject([])
+        } else {
+          resolve(result.examples);
+        }
+      });
+    });
+    p.then((resultlist) => {
+      myWindow = window.open()
+      for (i = 0; i < resultlist.length; i++) {
+        console.log(resultlist[i])
+        myWindow.document.write(resultlist[i] + "<br>")
+      };
+    });
+    myWindow.focus();
+  };
 });
 
+/*The extRun variable will ensure that the extract funciton cannot be run more
+than once per page load*/
 extRun = false;
-
 $(document).ready(function(){
   extRun = false;
 })
@@ -67,27 +103,41 @@ function runExtension(){
     // when button is clicked, selected examples/translations are added to array
     // table is removed, and slected examples/translations are printed in
     // plain text in place of the table for ease of copy/pasting
+    console.log("trying to get data")
     selectedArray = []
+    chrome.storage.local.get(['examples'], function(result){
+      // console.log(result.examples)
+      if (result.examples === undefined){
+        selectedArray = []
+      } else {
+        selectedArray = result.examples;
+      }
+    });
     $("#selectButton").click(function(){
       selectify(combined);
     });
     function selectify (combinedlist) {
-      // console.log(trlist);
       var k;
+      var count = 0;
       for (k = 0; k < combinedlist.length; k++) {
         if ($("#accept"+k).is(":checked")) {
+          count += 1
           selectedArray.push(combinedlist[k].tr+"|"+combinedlist[k].en);
         };
       };
       $("#translationTable").hide()
       $("#selectButton").hide()
-      var i;
-      for (i = 0; i < selectedArray.length; i++) {
-        var t = document.createElement("DIV");
-        t.setAttribute("style", "text-align:left")
-        t.textContent += selectedArray[i];
-        document.body.insertBefore(t, document.body.firstChild.nextSibling);
-      };
+      console.log(selectedArray)
+      chrome.storage.local.set({"examples": selectedArray}, function(){
+        console.log("attempting to store data")
+      })
+      if (count === 0) {
+        alert("no examples added!")
+      } else if (count === 1){
+        alert(count + " example added!")
+      } else {
+        alert(count + " examples added!")
+      }
     };
     extRun = true;
   };

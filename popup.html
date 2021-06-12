@@ -5,9 +5,24 @@
     <title>Reverso Extractor</title>
     <script src="jquery-3.6.0.min.js"></script>
     <script src="popup.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+    <style>
+    body{
+      width:auto;
+      height:auto;
+      padding:5px;
+      border:2px solid blue;
+    }
+    h1{
+      text-align:center;
+      white-space:nowrap;
+    }
+    </style>
   </head>
   <body>
     <h1>Reverso Extractor</h1>
-    <button id="extractPage">Extract!</button>
+    <button id="extractPage" class="btn btn-dark">Extract!</button><br><br>
+    <button id="showExamples"  class="btn btn-dark">Show Examples</button><br><br>
+    <button id="clearExamples" class="btn btn-danger">Clear Examples</button>
   </body>
 </html>
