@@ -85,6 +85,10 @@ function runExtension(){
     combined.sort(function (a,b){
       return a.tr.length - b.tr.length
     });
+    if (combined.length === 0){
+      alert("No examples detected on this page.")
+      return false
+    }
     // lay the options out sorted in table inserted at beginning of body
     // with checkboxes next to each example/translation
     var x = document.createElement("TABLE");
@@ -139,7 +143,7 @@ function runExtension(){
         console.log("attempting to store data")
       })
       if (count === 0) {
-        alert("no examples added!")
+        alert("No examples added!")
       } else if (count === 1){
         alert(count + " example added!")
       } else {
