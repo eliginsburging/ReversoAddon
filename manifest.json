@@ -13,7 +13,7 @@
   }],
   "icons": {"16": "ReversoExtractIcon16.png",
             "48": "ReversoExtractIcon48.png",
-            "129": "ReversoExtractIcon128.png"},
+            "128": "ReversoExtractIcon128.png"},
 
  "permissions": ["activeTab", "storage"]
 }
