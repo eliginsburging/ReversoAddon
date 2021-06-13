@@ -23,6 +23,7 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
       chrome.storage.local.get(['examples'], function(result){
         console.log(result.examples)
         if (result.examples === undefined){
+          alert("No examples to display!")
           reject([])
         } else {
           resolve(result.examples);
@@ -30,18 +31,22 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
       });
     });
     p.then((resultlist) => {
-      myWindow = window.open()
-      for (i = 0; i < resultlist.length; i++) {
-        console.log(resultlist[i])
-        myWindow.document.write(resultlist[i] + "<br>")
+      if (resultlist.length < 1) {
+        alert("No examples to display!")
+      } else {
+        myWindow = window.open()
+        for (i = 0; i < resultlist.length; i++) {
+          console.log(resultlist[i])
+          myWindow.document.write(resultlist[i] + "<br>")
+        };
+        myWindow.focus();
       };
     });
-    myWindow.focus();
   };
 });
 
-/*The extRun variable will ensure that the extract funciton cannot be run more
-than once per page load*/
+/*The extRun variable will ensure that the extract funciton cannot be run again
+if the user has run the extension but not selected examples*/
 extRun = false;
 $(document).ready(function(){
   extRun = false;
@@ -99,6 +104,7 @@ function runExtension(){
     btn.setAttribute("id", "selectButton");
     btn.setAttribute("style", "border:2px solid black")
     document.body.insertBefore(btn, document.body.firstChild.nextSibling);
+    extRun = true;
     $("#selectButton").text("Select");
     // when button is clicked, selected examples/translations are added to array
     // table is removed, and slected examples/translations are printed in
@@ -127,6 +133,7 @@ function runExtension(){
       };
       $("#translationTable").hide()
       $("#selectButton").hide()
+      extRun = false;
       console.log(selectedArray)
       chrome.storage.local.set({"examples": selectedArray}, function(){
         console.log("attempting to store data")
@@ -139,6 +146,5 @@ function runExtension(){
         alert(count + " examples added!")
       }
     };
-    extRun = true;
   };
 }
