@@ -15,5 +15,5 @@
             "48": "ReversoExtractIcon48.png",
             "128": "ReversoExtractIcon128.png"},
 
- "permissions": ["activeTab", "storage"]
+ "permissions": ["storage"]
 }
