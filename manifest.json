@@ -3,7 +3,7 @@
 
   "name": "Reverso Extractor",
   "description": "Facilitate the isolation of reverso examples for the purposes of creating flashcards to be uploaded to Anki or Quizlet",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "browser_action": {
    "default_popup": "popup.html"
  },

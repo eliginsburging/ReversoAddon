@@ -39,11 +39,31 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
         $('body').append(
           "<p>For information on importing these examples to Anki or Quizlet, visit:</p>" +
           "<ul><li><a href='https://docs.ankiweb.net/importing.html'>https://docs.ankiweb.net/importing.html</a></li>" +
-          "<li><a href='https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content'>https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content</a></li></ul><br><br>")
+          "<li><a href='https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content'>https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content</a></li></ul><br><br>" +
+          "<textarea id='exampletext'></textarea>")
         for (i = 0; i < resultlist.length; i++) {
-          console.log(resultlist[i])
-          $('body').append(resultlist[i] + "<br>");
+          // console.log(resultlist[i])
+          $('#exampletext').append(resultlist[i] + "\n");
         };
+        $("#exampletext").attr("rows",resultlist.length);
+        $("#exampletext").css({"width":"100%", "border":"2px solid black", "padding":"2px", "margin":"2px"})
+        $('body').append(
+          "<br>" +
+          "<button id='copytext'>Copy Examples</button>" + "<br>" +
+          "<button id='refresh'>Back to Search</button>"
+        )
+        $("#copytext, #refresh").css({"border":"2px solid blue", "padding":"2px", "margin":"2px", "background":"#00ffb7"})
+        function copyExamples() {
+          $("#exampletext").select();
+          document.execCommand("copy");
+          alert("Examples copied to clipboard!")
+        }
+        $("#copytext").click(function() {
+          copyExamples();
+        });
+        $("#refresh").click(function() {
+          location.reload();
+        })
       };
     });
   };
