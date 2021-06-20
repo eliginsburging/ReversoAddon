@@ -34,12 +34,16 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse){
       if (resultlist.length < 1) {
         alert("No examples to display!")
       } else {
-        myWindow = window.open()
+        $('body').empty();
+        $('body').css('text-align', 'left');
+        $('body').append(
+          "<p>For information on importing these examples to Anki or Quizlet, visit:</p>" +
+          "<ul><li><a href='https://docs.ankiweb.net/importing.html'>https://docs.ankiweb.net/importing.html</a></li>" +
+          "<li><a href='https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content'>https://help.quizlet.com/hc/en-us/articles/360029977151-Creating-sets-by-importing-content</a></li></ul><br><br>")
         for (i = 0; i < resultlist.length; i++) {
           console.log(resultlist[i])
-          myWindow.document.write(resultlist[i] + "<br>")
+          $('body').append(resultlist[i] + "<br>");
         };
-        myWindow.focus();
       };
     });
   };
