@@ -91,11 +91,24 @@ function runExtension(){
     css.appendChild(document.createTextNode(styles));
     document.head.appendChild(css)
     // Grab all the target language sentences and put them in an array
-    trarray = $(".src.ltr").map(function(){
+    var url = window.location.href;
+    var classtargetstr = ""
+    var classtargetsen = ""
+    if (url.indexOf('arabic-english') >= 0 || url.indexOf('hebrew-english') >= 0){
+      classtargetstr = ".src.rtl"
+      classtargetsen = ".trg.ltr"
+    } else if (url.indexOf('english-arabic') >= 0 || url.indexOf('english-hebrew') >= 0) {
+      classtargetstr = ".src.ltr"
+      classtargetsen = ".trg.rtl"
+    } else {
+      classtargetstr = ".src.ltr"
+      classtargetsen = ".trg.ltr"
+    }
+    trarray = $(classtargetstr).map(function(){
       return $.trim($(this).text());
     });
     // Grab all the English translations and put them in an array
-    enarray = $(".trg.ltr").map(function(){
+    enarray = $(classtargetsen).map(function(){
       return $.trim($(this).text());
     });
     // create a new array where each element is an object with
