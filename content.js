@@ -104,6 +104,8 @@ function runExtension(){
       classtargetstr = ".src.ltr"
       classtargetsen = ".trg.ltr"
     }
+    var srctargetstr = ".more-context"
+    // Grab all the sentences in the target language and put them in an array
     trarray = $(classtargetstr).map(function(){
       return $.trim($(this).text());
     });
@@ -111,12 +113,17 @@ function runExtension(){
     enarray = $(classtargetsen).map(function(){
       return $.trim($(this).text());
     });
+    // grab all the source links and put them in an array
+    srcarray = $(srctargetstr).map(function(){
+      return $.trim($(this).attr('title'));
+    });
     // create a new array where each element is an object with
-    // target sentence as one property and english translation as another
+    // target sentence as one property, english translation as another, and
+    // an indication of the source is a third
     var i;
     var combined = [];
     for (i = 0; i < trarray.length; i++) {
-      combined.push({tr: trarray[i], en: enarray[i]})
+      combined.push({tr: trarray[i], en: enarray[i], src: srcarray[i]})
     };
     // sort combined array based on length of target sentences
     combined.sort(function (a,b){
@@ -128,12 +135,13 @@ function runExtension(){
     }
     // lay the options out sorted in table inserted at beginning of body
     // with checkboxes next to each example/translation
+    // sources appear as titles for the table row, which will appear on hover
     var x = document.createElement("TABLE");
     x.setAttribute("id", "translationTable");
     x.setAttribute("style", "text-align:left;");
     document.body.insertBefore(x, document.body.firstChild);
     for (j = 0; j < combined.length; j++) {
-      $("#translationTable").append("<tr id='row" + j + "'><td><input type='checkbox' id='accept"+j+"'></input><td>"+j+"</td><td>"+combined[j].tr+"</td><td>"+combined[j].en+"</td></tr>")
+      $("#translationTable").append("<tr id='row" + j + "' title='"+combined[j].src+"'><td><input type='checkbox' id='accept"+j+"'></input><td>"+j+"</td><td"+">"+combined[j].tr+"</td><td>"+combined[j].en+"</td></tr>")
     };
     //add some space after the table
     var b = document.createElement("DIV");
