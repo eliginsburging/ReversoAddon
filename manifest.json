@@ -1,10 +1,10 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
 
   "name": "Reverso Extractor",
   "description": "Facilitate the isolation of reverso examples for the purposes of creating flashcards to be uploaded to Anki or Quizlet",
-  "version": "0.0.5",
-  "browser_action": {
+  "version": "0.0.6",
+  "action": {
    "default_popup": "popup.html"
  },
   "content_scripts": [{

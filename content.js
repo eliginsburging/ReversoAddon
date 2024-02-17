@@ -86,7 +86,7 @@ function runExtension(){
   if (extRun === false){
     // style table so alternating rows are shaded
     var css = document.createElement("STYLE");
-    var styles = 'tr:nth-child(even) {background:#CCC}'
+    var styles = 'tr:nth-child(even) {background:#CCC} table {width:100%;table-layout:fixed;} .thirty {width:32%}'
     css.type = 'text/css';
     css.appendChild(document.createTextNode(styles));
     document.head.appendChild(css)
@@ -122,6 +122,8 @@ function runExtension(){
     // an indication of the source is a third
     var i;
     var combined = [];
+    // regexp to capture source url (captures substring between parentheses)
+    var regExp = /\(([^()]*)\)/g;
     for (i = 0; i < trarray.length; i++) {
       combined.push({tr: trarray[i], en: enarray[i], src: srcarray[i]})
     };
@@ -140,8 +142,15 @@ function runExtension(){
     x.setAttribute("id", "translationTable");
     x.setAttribute("style", "text-align:left;");
     document.body.insertBefore(x, document.body.firstChild);
+    //add table headers
+    $("#translationTable").append("<tr><th></th><th>#</th><th class='thirty'>Sentence</th><th class='thirty'>Translation</th><th class='thirty'>source</th></tr>")
+    //add table rows where each row contains a checkbox, a sentence, the translation of that sentence, and the source of the sentence
     for (j = 0; j < combined.length; j++) {
-      $("#translationTable").append("<tr id='row" + j + "' title='"+combined[j].src+"'><td><input type='checkbox' id='accept"+j+"'></input><td>"+j+"</td><td"+">"+combined[j].tr+"</td><td>"+combined[j].en+"</td></tr>")
+      var urlshortened = combined[j].src.split('(').pop().slice(0,-1).slice(0,75)
+      if (urlshortened.length > 74) {
+        urlshortened = urlshortened+"..."
+      }
+      $("#translationTable").append("<tr id='row" + j + "' title='"+combined[j].src+"'><td><input type='checkbox' id='accept"+j+"'></input><td>"+j+"</td><td"+">"+combined[j].tr+"</td><td>"+combined[j].en+"</td><td>"+urlshortened+"</td></tr>")
     };
     //add some space after the table
     var b = document.createElement("DIV");
@@ -153,6 +162,8 @@ function runExtension(){
     btn.setAttribute("id", "selectButton");
     btn.setAttribute("style", "border:2px solid black")
     document.body.insertBefore(btn, document.body.firstChild.nextSibling);
+    //automatically scroll to top of page where the table has been inserted.
+    document.body.scrollTop = document.documentElement.scrollTop = 0;
     extRun = true;
     $("#selectButton").text("Select");
     // when button is clicked, selected examples/translations are added to array
